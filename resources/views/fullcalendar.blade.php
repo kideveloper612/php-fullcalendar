@@ -47,7 +47,7 @@
     }
 
     .fc-event-time {
-        display : none;
+        display : none!important;
     }
 
 </style>
@@ -124,11 +124,14 @@
             droppable: true,
             dayMaxEvents: true,
             initialView: 'dayGridMonth',
-            events: SITEURL + '/fullcalendar/event',
+            eventResizableFromStart: true,
+            events: {
+                url: SITEURL + '/fullcalendar/event'
+            },
             select: function(eventObj) {
                 var title = prompt('Event Title:');
                 if (title) {
-                    $.ajax({
+                    $.ajax({    
                         url: SITEURL + "/fullcalendar/create",
                         data: {
                             'title': title,
@@ -239,6 +242,7 @@
         }
 
         calendar.render();
+
     });
 </script>
 </html>
