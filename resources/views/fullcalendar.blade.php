@@ -60,6 +60,22 @@
             <strong>Draggable Events</strong>
         </p>
 
+        <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event p-1 mb-1'>
+            <div data-event='{"id": "1","title": "Darren Round","start": "2020-07-03 17:30:00","setAllDay": "false","timeZone": "UTC","resource_id": "1"}' class='fc-event-main'>Darren Round</div>
+        </div>
+        <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event p-1 mb-1'>
+            <div data-event='{"id": "2","title": "Jimmy George","start": "2020-07-10 17:30:00","setAllDay": "false","timeZone": "UTC","resource_id": "2"}' class='fc-event-main'>Jimmy George</div>
+        </div>
+        <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event p-1 mb-1'>
+            <div data-event='{"id": "3","title": "Nic Atkins","start": "2020-07-03 17:30:00","setAllDay": "false","timeZone": "UTC","resource_id": "3"}' class='fc-event-main'>Nic Atkins</div>
+        </div>
+        <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event p-1 mb-1'>
+            <div data-event='{"id": "4","title": "Paul Hrynkiw","start": "2020-07-03 17:30:00","setAllDay": "false","timeZone": "UTC","resource_id": "1"}' class='fc-event-main'>Paul Hrynkiw</div>
+        </div>
+        <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event p-1 mb-1'>
+            <div data-event='{"id": "5","title": "Umed Ali","start": "2020-07-13 17:30:00","setAllDay": "false","timeZone": "UTC","resource_id": "1"}' class='fc-event-main'>Umed Ali</div>
+        </div>
+
     </div>
  
     <div id='calendar-container'>
@@ -86,30 +102,13 @@
             }
         });
 
-        $.ajax({
-            url: SITEURL + '/fullcalendar/event',
-        })
-        .then((data) => {
-            data.forEach(ele => {
-                const diffDays = Math.ceil(Math.abs(new Date(ele.end) - new Date(ele.start)) / (1000 * 60 * 60 * 24));
-                let json = JSON.stringify({"id": ele.id, "title": ele.title, "duration": { "days": diffDays }});
-                $('#external-events').append(`<div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event' data-event='${json}'><div class='fc-event-main'>${ele.title}</div></div>`)
-            });
-            $('#external-events').append(`<p><input type='checkbox' id='drop-remove' /><label for='drop-remove'>remove after drop</label></p>`);
-            checkbox = document.getElementById('drop-remove');
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-
         new Draggable(containerEl, {
             itemSelector: '.fc-event',
             eventData: function(event) {
-                let eventData = JSON.parse(event.getAttribute('data-event'));
+                let eventData = JSON.parse(event.children[0].getAttribute('data-event'));
                 return {
                     id: eventData.id,
-                    title: eventData.title,
-                    duration: eventData.duration
+                    title: eventData.title
                 };
             }
         });
@@ -127,9 +126,7 @@
             dayMaxEvents: true,
             initialView: 'resourceTimelineMonth',
             eventResizableFromStart: true,
-            events: {
-                url: SITEURL + '/fullcalendar/event'
-            },
+            events: SITEURL + '/fullcalendar/event',
             resourceAreaHeaderContent: 'Departments',
             resources: [
                 { id: '1', title: 'ACM/WFO Engineer' },
@@ -139,56 +136,31 @@
                 { id: '5', title: 'CTI Engineer' },
                 { id: '6', title: 'Duty Manager' },
             ],
-            select: function(eventObj) {
-                var title = prompt('Event Title:');
-                if (title) {
-                    $.ajax({    
-                        url: SITEURL + "/fullcalendar/create",
-                        data: {
-                            'title': title,
-                            'start': eventObj.startStr,
-                            'end': eventObj.endStr
-                        },
-                        type: "POST",
-                        success: function (data) {
-                            calendar.addEvent({
-                                title: title,
-                                start: eventObj.startStr,
-                                end: eventObj.endStr,
-                                allDay: true
-                            });
-                        },
-                        error: function(err) {
-                            console.log(err);
-                        }
-                    });
-                }
-                calendar.unselect();
-            },
             eventReceive: function (event) {
                 let startDate = moment(event.event.start).format('YYYY-MM-DD HH:mm:ss');
-                let endDate = moment(event.event.end).format('YYYY-MM-DD HH:mm:ss');
+                let endDate = moment(event.event.start).add(1, 'days').format('YYYY-MM-DD HH:mm:ss');
+                console.log(endDate);
                 $.ajax({
-                    url: SITEURL + '/fullcalendar/update',
+                    url: SITEURL + '/fullcalendar/create',
                     method: 'POST',
                     data: {
                         'id': event.event.id,
                         'title': event.event.title,
                         'start': startDate,
-                        'end': endDate
+                        'end': endDate,
+                        'resource_id': event.event._def.resourceIds[0]
                     },
                     success: function (data) {
-                        console.log('Successfully updated!')
+                        console.log('Successfully inserted!');
+                        event.draggedEl.parentNode.removeChild(event.draggedEl);
                     },
                     error: function (err) {
                         alert(err.responseJSON.message);
                     }
                 });
-                if (checkbox.checked) {
-                    event.draggedEl.parentNode.removeChild(event.draggedEl);
-                }
             },
             eventDrop: function (event) {
+                console.log(event.event._def.resourceIds[0]);
                 let startDate = moment(event.event.start).format('YYYY-MM-DD HH:mm:ss');
                 let endDate = moment(event.event.end).format('YYYY-MM-DD HH:mm:ss');
                 let id = event.event.id;
@@ -199,7 +171,8 @@
                         'id': event.event.id,
                         'title': event.event.title,
                         'start': startDate,
-                        'end': endDate
+                        'end': endDate,
+                        'resource_id': event.event._def.resourceIds[0]
                     },
                     success: function (data) {
                         console.log('Successfully updated!')
@@ -220,7 +193,8 @@
                         'id': event.event.id,
                         'title': event.event.title,
                         'start': startDate,
-                        'end': endDate
+                        'end': endDate,
+                        'resource_id': event.event._def.resourceIds[0]
                     },
                     success: function (data) {
                         console.log('Successfully updated!')
