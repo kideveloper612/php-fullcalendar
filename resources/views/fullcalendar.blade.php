@@ -6,6 +6,7 @@
 </head>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
 <link rel="stylesheet" href='https://cdn.jsdelivr.net/npm/fullcalendar@5.1.0/main.min.css' />
+<link rel="stylesheet" href='https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.1.0/main.min.css' />
 <style>
 
     html, body {
@@ -69,6 +70,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.1.0/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.1.0/main.min.js'></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -123,11 +125,20 @@
             editable: true,
             droppable: true,
             dayMaxEvents: true,
-            initialView: 'dayGridMonth',
+            initialView: 'resourceTimelineMonth',
             eventResizableFromStart: true,
             events: {
                 url: SITEURL + '/fullcalendar/event'
             },
+            resourceAreaHeaderContent: 'Departments',
+            resources: [
+                { id: '1', title: 'ACM/WFO Engineer' },
+                { id: '2', title: 'IPO Engineer' },
+                { id: '3', title: 'ITS Engineer' },
+                { id: '4', title: 'AACC/ACCS Engineer' },
+                { id: '5', title: 'CTI Engineer' },
+                { id: '6', title: 'Duty Manager' },
+            ],
             select: function(eventObj) {
                 var title = prompt('Event Title:');
                 if (title) {
