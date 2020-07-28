@@ -31,12 +31,13 @@ class FullCalendarController extends Controller
    
     public function create(Request $request)
     {  
-        $insertArr = [ 'title' => $request->title,
-                       'start' => $request->start,
-                       'end' => $request->end,
-                       'resourceId' => $request->resource_id
+        $insertArr = [ 
+                        'title' => $request->title,
+                        'start' => $request->start,
+                        'end' => $request->end,
+                        'resourceId' => $request->resource_id
                     ];
-        $event = Event::insert($insertArr);   
+        $event = Event::insertGetId($insertArr);
         return Response::json($event);
     }
      

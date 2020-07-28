@@ -107,7 +107,6 @@
             eventData: function(event) {
                 let eventData = JSON.parse(event.children[0].getAttribute('data-event'));
                 return {
-                    id: eventData.id,
                     title: eventData.title
                 };
             }
@@ -139,20 +138,18 @@
             eventReceive: function (event) {
                 let startDate = moment(event.event.start).format('YYYY-MM-DD HH:mm:ss');
                 let endDate = moment(event.event.start).add(1, 'days').format('YYYY-MM-DD HH:mm:ss');
-                console.log(endDate);
                 $.ajax({
                     url: SITEURL + '/fullcalendar/create',
                     method: 'POST',
                     data: {
-                        'id': event.event.id,
                         'title': event.event.title,
                         'start': startDate,
                         'end': endDate,
                         'resource_id': event.event._def.resourceIds[0]
                     },
-                    success: function (data) {
-                        console.log('Successfully inserted!');
-                        event.draggedEl.parentNode.removeChild(event.draggedEl);
+                    success: function (id) {
+                        console.log('Successfully inserted!', id);
+                        window.location.reload();
                     },
                     error: function (err) {
                         alert(err.responseJSON.message);
@@ -160,7 +157,6 @@
                 });
             },
             eventDrop: function (event) {
-                console.log(event.event._def.resourceIds[0]);
                 let startDate = moment(event.event.start).format('YYYY-MM-DD HH:mm:ss');
                 let endDate = moment(event.event.end).format('YYYY-MM-DD HH:mm:ss');
                 let id = event.event.id;
@@ -185,6 +181,7 @@
             eventResize: function (event) {
                 let startDate = moment(event.event.start).format('YYYY-MM-DD HH:mm:ss');
                 let endDate = moment(event.event.end).format('YYYY-MM-DD HH:mm:ss');
+                console.log(event.event.id, startDate, endDate)
                 let id = event.event.id;
                 $.ajax({
                     url: SITEURL + '/fullcalendar/update',
@@ -205,20 +202,22 @@
                 });
             },
             eventClick: function (event) {
-                $.ajax({
-                    url: SITEURL + '/fullcalendar/delete',
-                    method: 'POST',
-                    data: {
-                        'id': event.event.id
-                    },
-                    success: function (data) {
-                        console.log('Successfully deleted!');
-                        destory(event.event.id);
-                    },
-                    error: function (err) {
-                        alert(err.responseJSON.message);
-                    }
-                });
+                if (confirm('Are you sure to delete this event?')) {
+                    $.ajax({
+                        url: SITEURL + '/fullcalendar/delete',
+                        method: 'POST',
+                        data: {
+                            'id': event.event.id
+                        },
+                        success: function (data) {
+                            console.log('Successfully deleted!');
+                            destory(event.event.id);
+                        },
+                        error: function (err) {
+                            alert(err.responseJSON.message);
+                        }
+                    });
+                }
             }
         });
 
@@ -227,7 +226,6 @@
         }
 
         calendar.render();
-
     });
 </script>
 </html>
