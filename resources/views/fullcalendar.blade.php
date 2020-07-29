@@ -146,8 +146,8 @@
                         'title': event.event.title,
                         'start': startDate,
                         'end': endDate,
-                        'resource_id': event.event._def.resourceIds[0],
-                        'member_id': event.event._def.extendedProps.description
+                        'resourceId': event.event._def.resourceIds[0],
+                        'resource_id': event.event._def.extendedProps.description
                     },
                     success: function (id) {
                         console.log('Successfully inserted!', id);
