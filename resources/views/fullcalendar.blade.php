@@ -108,7 +108,11 @@
                 let eventData = JSON.parse(event.children[0].getAttribute('data-event'));
                 return {
                     title: eventData.title,
-                    description: eventData.resource_id
+                    description: eventData.resource_id,
+                    duration: { hours: 159 },
+                    startTime: '17:30:00',
+                    setAllDay: false,
+                    timeZone:'UTC'
                 };
             }
         });
@@ -138,7 +142,7 @@
             ],
             eventReceive: function (event) {
                 let startDate = moment(event.event.start).format('YYYY-MM-DD HH:mm:ss');
-                let endDate = moment(event.event.start).add(1, 'days').format('YYYY-MM-DD HH:mm:ss');
+                let endDate = moment(event.event.end).format('YYYY-MM-DD HH:mm:ss');
                 $.ajax({
                     url: SITEURL + '/fullcalendar/create',
                     method: 'POST',
