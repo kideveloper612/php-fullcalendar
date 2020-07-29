@@ -35,7 +35,8 @@ class FullCalendarController extends Controller
                         'title' => $request->title,
                         'start' => $request->start,
                         'end' => $request->end,
-                        'resourceId' => $request->resource_id
+                        'resourceId' => $request->resource_id,
+                        'resource_id' => $request->member_id
                     ];
         $event = Event::insertGetId($insertArr);
         return Response::json($event);

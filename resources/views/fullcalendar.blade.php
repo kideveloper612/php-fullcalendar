@@ -61,19 +61,19 @@
         </p>
 
         <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event p-1 mb-1'>
-            <div data-event='{"id": "1","title": "Darren Round","start": "2020-07-03 17:30:00","setAllDay": "false","timeZone": "UTC","resource_id": "1"}' class='fc-event-main'>Darren Round</div>
+            <div data-event='{"title": "Darren Round","start": "2020-07-03 17:30:00","setAllDay": "false","timeZone": "UTC","resource_id": "1111"}' class='fc-event-main'>Darren Round</div>
         </div>
         <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event p-1 mb-1'>
-            <div data-event='{"id": "2","title": "Jimmy George","start": "2020-07-10 17:30:00","setAllDay": "false","timeZone": "UTC","resource_id": "2"}' class='fc-event-main'>Jimmy George</div>
+            <div data-event='{"title": "Jimmy George","start": "2020-07-10 17:30:00","setAllDay": "false","timeZone": "UTC","resource_id": "2222"}' class='fc-event-main'>Jimmy George</div>
         </div>
         <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event p-1 mb-1'>
-            <div data-event='{"id": "3","title": "Nic Atkins","start": "2020-07-03 17:30:00","setAllDay": "false","timeZone": "UTC","resource_id": "3"}' class='fc-event-main'>Nic Atkins</div>
+            <div data-event='{"title": "Nic Atkins","start": "2020-07-03 17:30:00","setAllDay": "false","timeZone": "UTC","resource_id": "3333"}' class='fc-event-main'>Nic Atkins</div>
         </div>
         <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event p-1 mb-1'>
-            <div data-event='{"id": "4","title": "Paul Hrynkiw","start": "2020-07-03 17:30:00","setAllDay": "false","timeZone": "UTC","resource_id": "1"}' class='fc-event-main'>Paul Hrynkiw</div>
+            <div data-event='{"title": "Paul Hrynkiw","start": "2020-07-03 17:30:00","setAllDay": "false","timeZone": "UTC","resource_id": "4444"}' class='fc-event-main'>Paul Hrynkiw</div>
         </div>
         <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event p-1 mb-1'>
-            <div data-event='{"id": "5","title": "Umed Ali","start": "2020-07-13 17:30:00","setAllDay": "false","timeZone": "UTC","resource_id": "1"}' class='fc-event-main'>Umed Ali</div>
+            <div data-event='{"title": "Umed Ali","start": "2020-07-13 17:30:00","setAllDay": "false","timeZone": "UTC","resource_id": "5555"}' class='fc-event-main'>Umed Ali</div>
         </div>
 
     </div>
@@ -107,7 +107,8 @@
             eventData: function(event) {
                 let eventData = JSON.parse(event.children[0].getAttribute('data-event'));
                 return {
-                    title: eventData.title
+                    title: eventData.title,
+                    description: eventData.resource_id
                 };
             }
         });
@@ -145,7 +146,8 @@
                         'title': event.event.title,
                         'start': startDate,
                         'end': endDate,
-                        'resource_id': event.event._def.resourceIds[0]
+                        'resource_id': event.event._def.resourceIds[0],
+                        'member_id': event.event._def.extendedProps.description
                     },
                     success: function (id) {
                         console.log('Successfully inserted!', id);
