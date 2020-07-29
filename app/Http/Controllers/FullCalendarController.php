@@ -46,7 +46,7 @@ class FullCalendarController extends Controller
     public function update(Request $request)
     {   
         $where = array('id' => $request->id);
-        $updateArr = ['title' => $request->title,'start' =>  $request->start, 'end' => $request->end, 'resourceId' => $request->resource_id];
+        $updateArr = ['title' => $request->title,'start' =>  $request->start, 'end' => $request->end, 'resourceId' => $request->resourceId];
         $event  = Event::where($where)->update($updateArr);
  
         return Response::json($event);

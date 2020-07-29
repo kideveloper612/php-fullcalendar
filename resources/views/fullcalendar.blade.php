@@ -170,7 +170,7 @@
                         'title': event.event.title,
                         'start': startDate,
                         'end': endDate,
-                        'resource_id': event.event._def.resourceIds[0]
+                        'resourceId': event.event._def.resourceIds[0]
                     },
                     success: function (data) {
                         console.log('Successfully updated!')
@@ -193,7 +193,7 @@
                         'title': event.event.title,
                         'start': startDate,
                         'end': endDate,
-                        'resource_id': event.event._def.resourceIds[0]
+                        'resourceId': event.event._def.resourceIds[0]
                     },
                     success: function (data) {
                         console.log('Successfully updated!')
