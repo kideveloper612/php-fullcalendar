@@ -157,8 +157,8 @@
                         'resource_id': event.event._def.extendedProps.description
                     },
                     success: function (id) {
-                        console.log('Successfully inserted!', id);
-                        window.location.reload();
+                        calendar.refetchEvents();
+                        event.event.remove();
                     },
                     error: function (err) {
                         alert(err.responseJSON.message);
