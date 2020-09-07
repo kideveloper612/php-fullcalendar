@@ -96,6 +96,7 @@
         var checkbox;
 
         var SITEURL = "{{url('/')}}";
+        var currentDate = localStorage.getItem('currentDate');
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -128,6 +129,7 @@
             editable: true,
             droppable: true,
             dayMaxEvents: true,
+            initialDate: currentDate,
             initialView: 'resourceTimelineMonth',
             eventResizableFromStart: true,
             events: SITEURL + '/fullcalendar/event',
@@ -143,6 +145,7 @@
             eventReceive: function (event) {
                 let startDate = moment(event.event.start).format('YYYY-MM-DD HH:mm:ss');
                 let endDate = moment(event.event.end).format('YYYY-MM-DD HH:mm:ss');
+                setCurrentDate();
                 $.ajax({
                     url: SITEURL + '/fullcalendar/create',
                     method: 'POST',
@@ -230,8 +233,14 @@
         function destory(id) {
             calendar.getEventById(id).remove();
         }
+        
+        function setCurrentDate() {
+            localStorage.setItem('currentDate', calendar.getDate().toISOString());
+        }
 
         calendar.render();
     });
+
+    
 </script>
 </html>
